@@ -79,3 +79,20 @@ def dealer_turn(deck_id, dealer_cards):
     print(f"Dealer's final score: {dealer_score}")
     return dealer_score
 # ------------------------------------------------------------------------
+Function to Replay instead of it just ending
+# ------------------------------------------------------------------------
+# UI for replay
+def play_again():
+    while True:
+        choice = input("Do you want to play again? (y/n): ").lower()
+        if choice == 'y':
+            return True
+        elif choice == 'n':
+            return False
+        else:
+            print("Invalid input, please enter 'y' or 'n'.")
+# ------------------------------------------------------------------------
+Main Function. Runs it all.
+# ------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------
