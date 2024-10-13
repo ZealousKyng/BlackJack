@@ -1,18 +1,5 @@
 import requests
 
-# Calls the deck in shuffled
-shufflecall = requests.get('https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
-deck = shufflecall.json()
-deck_id = deck['deck_id']
-
-# Dealer cards
-dcards = requests.get(f'https://www.deckofcardsapi.com/api/deck/{deck_id}/draw/?count=2')
-dealer_cards = dcards.json()['cards']
-
-# User cards
-pcards = requests.get(f'https://www.deckofcardsapi.com/api/deck/{deck_id}/draw/?count=2')
-player_cards = pcards.json()['cards']
-
 # ------------------------------------------------------------------------
 # Function to Add cards
 # ------------------------------------------------------------------------
@@ -39,6 +26,15 @@ def add_cards(cards):
     
     return score
 # ------------------------------------------------------------------------
+# Function to Display the cards
+# ------------------------------------------------------------------------
+# This Displays the Dealer and User cards
+def display_cards(player_cards, dealer_cards, player_score, dealer_score):
+    print("\nDealer's Cards: [", dealer_cards[0]['value'], "of", dealer_cards[0]['suit'], "] [ ? ]")
+    print("Your Cards: ", [(card['value'], card['suit']) for card in player_cards])
+    print(f"Your current score: {player_score}")
+    
+# ------------------------------------------------------------------------
 # Function for the Users turn
 # ------------------------------------------------------------------------
 # UI for the User
@@ -62,7 +58,7 @@ def player_turn(deck_id, player_cards):
         else:
             print("Invalid input, please enter 'h' for hit or 's' for stand.")
 # ------------------------------------------------------------------------
-# Function for the players turn
+# Function for the Dealers turn
 # ------------------------------------------------------------------------
 # Post-User decision "dealer" hit or not
 def dealer_turn(deck_id, dealer_cards):
@@ -94,5 +90,46 @@ def play_again():
 # ------------------------------------------------------------------------
 Main Function. Runs it all.
 # ------------------------------------------------------------------------
+# Main bit
+def blackjack_game():
+    while True:
+        shufflecall = requests.get('https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
+        deck = shufflecall.json()
+        deck_id = deck['deck_id']
+
+        dcards = requests.get(f'https://www.deckofcardsapi.com/api/deck/{deck_id}/draw/?count=2')
+        dealer_cards = dcards.json()['cards']
+
+        pcards = requests.get(f'https://www.deckofcardsapi.com/api/deck/{deck_id}/draw/?count=2')
+        player_cards = pcards.json()['cards']
+
+        player_score = add_cards(player_cards)
+        dealer_score = add_cards(dealer_cards)
+
+        display_cards(player_cards, dealer_cards, player_score, dealer_score)
+
+        # Player's turn
+        player_score, busted = player_turn(deck_id, player_cards)
+        if busted:
+            print("Dealer wins! You busted.")
+        else:
+            # Dealer's turn
+            dealer_score = dealer_turn(deck_id, dealer_cards)
+            
+            # Compare
+            if dealer_score > 21 or player_score > dealer_score:
+                print("You win!")
+            elif dealer_score > player_score:
+                print("Dealer wins!")
+            else:
+                print("It's a tie!")
+
+        # Play Again
+        if not play_again():
+            print("Thanks for playing!")
+            break
+
+# Start the game
+blackjack_game()
 
 # ------------------------------------------------------------------------
