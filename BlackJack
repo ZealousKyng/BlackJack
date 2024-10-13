@@ -1,1 +1,6 @@
+import requests
 
+# Calls the deck in shuffled
+shufflecall = requests.get('https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
+deck = shufflecall.json()
+deck_id = deck['deck_id']
