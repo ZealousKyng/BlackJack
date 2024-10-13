@@ -12,3 +12,30 @@ dealer_cards = dcards.json()['cards']
 # User cards
 pcards = requests.get(f'https://www.deckofcardsapi.com/api/deck/{deck_id}/draw/?count=2')
 player_cards = pcards.json()['cards']
+
+# ------------------------------------------------------------------------
+# Function to Add cards
+# ------------------------------------------------------------------------
+# This adds up the cards
+def add_cards(cards):
+
+    score = 0
+    aces = 0
+    #This associates a number with the facecards so i can add them to numbers
+    key = {'JACK': 10, 'QUEEN': 10, 'KING': 10, 'ACE': 11}
+    
+    for card in cards:
+        value = card['value']
+        if value in key:
+            score += key[value]
+        else:
+            score += int(value)
+        if value == 'ACE':
+            aces += 1
+    #This automatically changes the Ace from an 11 to a 1 to prevent busting
+    while score > 21 and aces:
+        score -= 10
+        aces -= 1
+    
+    return score
+# ------------------------------------------------------------------------
