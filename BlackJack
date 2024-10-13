@@ -9,6 +9,6 @@ deck_id = deck['deck_id']
 dcards = requests.get(f'https://www.deckofcardsapi.com/api/deck/{deck_id}/draw/?count=2')
 dealer_cards = dcards.json()['cards']
 
-User cards
+# User cards
 pcards = requests.get(f'https://www.deckofcardsapi.com/api/deck/{deck_id}/draw/?count=2')
 player_cards = pcards.json()['cards']
