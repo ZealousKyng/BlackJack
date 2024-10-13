@@ -4,3 +4,11 @@ import requests
 shufflecall = requests.get('https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
 deck = shufflecall.json()
 deck_id = deck['deck_id']
+
+# Dealer cards
+dcards = requests.get(f'https://www.deckofcardsapi.com/api/deck/{deck_id}/draw/?count=2')
+dealer_cards = dcards.json()['cards']
+
+User cards
+pcards = requests.get(f'https://www.deckofcardsapi.com/api/deck/{deck_id}/draw/?count=2')
+player_cards = pcards.json()['cards']
